@@ -1,0 +1,159 @@
+.popup {
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba($color-black, .85);
+    z-index: 2500;
+    //hide popup at the beginning
+    opacity: 0;
+    visibility: hidden;
+    transition: all .3s;
+
+    &__content {
+        @include absCenter;
+        width: 75%;
+        box-shadow: 0 2rem 4rem rgba($color-black, .2); 
+        border-radius: 3px;
+        // trick to give left and right same height automatically 
+        // through displaying them as table-cells and parent as a table
+        // display: table;
+        // USING FLEXBOX INSTEAD OF TABLE TRICK
+        display: flex;
+        // flex-direction: row;
+        // flex-wrap: wrap;
+        flex-flow: row nowrap;
+        overflow: hidden;
+        opacity: 0;
+        //repeating translate here, because this transform overwrites that from the mixin
+        transform: translate(-50%, -50%) scale(0);
+        transition: all .6s .2s;
+
+        @include respond(tab-port) {
+            flex-flow: column wrap;
+            height: 80vh;
+        }
+
+        //somehow making text less fuzzy
+        @include respond(phone) {
+            overflow: initial;
+        }
+    }
+
+    &__left {
+        flex: 1;
+        // width: calc(100% * (1/3));
+        // display: table-cell;
+        display: flex;
+        flex-flow: column wrap;
+
+        @include respond(tab-port) {
+            flex-flow: row nowrap;
+            flex: 2;
+        }
+
+        @include respond(phone) {
+            flex: 1;
+        }
+    }
+    
+    &__right {
+        flex: 2;
+        // width: calc(100% * (2/3));
+        // display: table-cell;
+        // vertical-align: middle;
+        padding: 3rem 5rem;
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: center;
+        background-color: $color-white;
+        
+        a {
+            align-self: flex-start;
+        }
+
+        @include respond(tab-port) {
+            flex: 3;
+            flex-direction: row;
+        }
+
+        @include respond(phone) {
+            padding: 2rem 2rem;
+            overflow-y: scroll;
+        }
+
+    }
+    
+    &__img {
+        max-width: 100%;
+        flex: 1;
+        object-fit: cover;
+
+        @include respond(tab-port) {
+            max-width: 50%;
+        }
+    }
+    
+    &__text {
+        font-size: 1.4rem;
+        padding-bottom: 4rem;
+
+        -moz-column-count: 2;
+        -moz-column-gap: 4rem;
+        -moz-column-rule: 1px solid $color-grey-light-2;
+
+        column-count: 2;
+        column-gap: 4rem;
+        column-rule: 1px solid $color-grey-light-2;
+        //requires to have lang attribute set on html element, chrome on windows doesn't support it yet(may 2018)
+        -moz-hyphens: auto;
+        -ms-hyphens: auto;
+        -webkit-hyphens: auto;
+        hyphens: auto;
+
+        @include respond(tab-port) {
+            -moz-column-count: 1;
+            column-count: 1;
+            padding: 0 4rem 4rem 4rem;
+        }
+
+        @include respond(phone) {
+            -moz-column-count: 1;
+            column-count: 1;
+            padding: 0 2rem 2rem 2rem;
+        }
+    }
+
+    // SHOW POPUP
+    //popup becomes target when we click anchor with href leading to popup's id
+    &:target {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    &:target &__content {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    &__close {
+        &:link, 
+        &:visited {
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 1rem;
+            right: 2.5rem;
+            font-size: 3rem;
+            color: $color-grey-dark;
+            transition: all .2s;
+        }
+
+        &:hover {
+            color: $color-primary;
+        }
+    }
+
+    
+}

@@ -1,0 +1,93 @@
+.story {
+    width: 75%;
+    margin: 0 auto;
+    box-shadow: 0 3rem 6rem rgba($color-black, .1);
+    background-color: rgba($color-white, .6);
+    border-radius: $border-radius-small;
+    padding: 6rem 6rem 6rem 9rem;
+    font-size: $font-size-default;
+    transform: skewX(-12deg);
+    z-index: 20;
+    // somehow b-v:h  fixes bug with transforming during hovering other elements like heading or button but makes text blurred
+    // backface-visibility: hidden;
+
+    @include respond(tab-port) {
+        width: 100%;
+        padding: 4rem 4rem 4rem 7rem;
+    }
+
+    @include respond(phone) {
+        transform: skewX(0);
+    }
+
+    &__shape {
+        //element has to have defined dimensions in order to make shape-outside work
+        height: 15rem;
+        width: 15rem;
+        // element also must be floated in order to make shape-outside work
+        float: left;
+        // to give space between floated elements better use transform:translate instead of margin 
+        transform: translateX(-3rem) skewX(12deg);
+        position: relative;
+        overflow: hidden;
+        border-radius: 50%;
+
+        @supports (-webkit-clip-path: circle(0 at 0 0)) or (clip-path: circle(0 at 0 0)) {
+            // shape-outside defines how the content around floats the element, here the shape is circle(radius at x y)
+            -webkit-shape-outside: circle(50% at 50% 50%);
+            shape-outside: circle(50% at 50% 50%);
+            -webkit-clip-path: circle(50% at 50% 50%);
+            clip-path: circle(50% at 50% 50%);
+            border-radius: 0;
+        }
+
+        @include respond(phone) {
+            transform: translateX(-3rem) skewX(0);
+        }
+    }
+
+    &__img {
+        height: 100%;
+        transform: translateX(-4rem) scale(1.4);
+        //solution to shaking picture
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        //seperate transitions to avoid flickering picture glitch
+        transition: filter .5s;
+        transition: transform .5s;
+    }
+    
+    &__text {
+        transform: skewX(12deg);
+        @include respond(phone) {
+            transform: skewX(0);
+        }
+    }
+    
+    &__caption {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, 20%);
+        font-size: 1.7rem;
+        text-transform: uppercase;
+        color: $color-white;
+        text-align: center;
+        opacity: 0;
+        transition: all .5s;
+        //solution to shaking caption
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+    }
+    
+    &:hover &__caption {
+        opacity: 1;
+        transform: translate(-50%, -50%);  
+    }
+
+    &:hover &__img {
+        transform: translateX(-4rem) scale(1);
+        filter: blur(3px) brightness(80%);
+    }
+
+} 

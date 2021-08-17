@@ -1,0 +1,77 @@
+@mixin clearfix {
+    &::after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+}
+
+@mixin absCenter {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+// MEDIA QUERY MANAGER - desktop first approach
+/*
+0      - 600px    Phones
+600px  - 900px    Tablets portrait
+900px  - 1200px   Tablets landscape
+1200px - 1800px   ---------------- default styles apply
+1800px +          Big desktop
+
+$breakpoint argument choices:
+- phone
+- tab-port
+- tab-land
+- big-d
+*/
+
+/* ====info =======
+We are not using pixels in media queries to bind our breakpoints to user browser's font-size in case if he changes it
+Relative units (e.g. rem, em) in media queries are always related to browser default font-size (usually 16px)
+Even if we change font-size in html it doesn't affect units in media queries
+We use ems over rems, because rems don't work correctly in all browsers
+*/
+
+// implementing ORDER: base + typography -> general layout + grid -> page layout -> components
+
+// MQuery mixin with @if drective, 1em = 16px => breakpoint[px]/16 = breakpoint[em]
+@mixin respond($breakpoint) {
+    @if $breakpoint == phone {
+        @media only screen and (max-width: 37.5em) { @content; } //600px
+    }
+    @if $breakpoint == tab-port {
+        @media only screen and (max-width: 56.25em) { @content; } //900px
+    }
+    @if $breakpoint == tab-land {
+        @media only screen and (max-width: 75em) { @content; } //1200px
+    }
+    @if $breakpoint == big-d {
+        @media only screen and (min-width: 112.5em) { @content; } //1800px
+    }
+}
+
+//ANOTHER METHOD with map, not used in this project
+
+// store breakpoints in a map
+$breakpoints: (
+    sm: 37.5em,
+    md: 56.25em,
+    lg: 75em,
+);
+ 
+// mixin :: Size (sm, md, lg)
+@mixin break($size) {
+ 
+    // map over breakpoints and use value of passed in size
+    @media screen and (max-width: map-get($breakpoints, size)) { @content; } //using map-get to grab variables values
+}
+
+
+
+
+
+

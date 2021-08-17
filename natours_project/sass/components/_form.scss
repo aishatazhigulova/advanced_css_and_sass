@@ -1,0 +1,112 @@
+.form {
+    &__group:not(:last-child) {
+        margin-bottom: 2rem;
+    }
+
+    &__input {
+        font-size: 1.5rem;
+        // browser sets font-family for input elements to some default font - not inherit, therefore we hardcode inherit to change this behavior
+        font-family: inherit;
+        color: inherit;
+        font-weight: inherit;
+        padding: 1.5rem 2rem;
+        border-radius: $border-radius-tiny;
+        background-color: rgba($color-white, .5);
+        border: none;
+        border-bottom: 3px solid transparent;
+        width: 90%;
+        display: block;
+        transition: all .3s;
+
+        @include respond(tab-port) {
+            width: 100%;
+        }
+
+        &:focus {
+            outline: none;
+            box-shadow: 0 1rem 2rem rgba($color-black, .1);
+            border-bottom: 3px solid $color-primary;
+            // orange border if input is invalid
+            &:invalid {
+                border-bottom: 3px solid $color-secondary-dark;
+            }
+        }
+        // style placeholder
+        &::-webkit-input-placeholder {
+            color: $color-grey-dark-2;
+        }
+
+        // avoiding firefox default required inputs styling
+        &:required {
+            box-shadow: none;
+        }
+    }
+
+    &__label {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-left: 2rem;
+        margin-top: .7rem;
+        display: inline-block;
+        transition: all .3s;
+    }
+
+    //animation for label
+    // hide label if user didnt type anything
+    &__input:placeholder-shown + &__label {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-4rem);
+    }
+
+    &__radio-group {
+        display: inline-block;
+        width: 49%;
+
+        @include respond(tab-port) {
+            width: 100%;
+            padding-bottom: 2rem;
+        }
+    }
+
+    &__radio-input {
+        // display: none;
+        //for focus accessibility we set 0 opacity instead of display: none
+        opacity: 0;
+    }
+
+    &__radio-label {
+        font-size: $font-size-default;
+        cursor: pointer;
+        position: relative;
+        padding-left: 4.5rem;
+    }
+
+    &__radio-btn {
+        width: 3rem;
+        height: 3rem;
+        display: inline-block;
+        border: 5px solid $color-primary;
+        border-radius: 50%;
+        position: absolute;
+        left: 0;
+        top: -.4rem;
+
+        &::after {
+            content: '';
+            display: block;
+            height: 1.3rem;
+            width: 1.3rem;
+            border-radius: 50%;
+            @include absCenter;
+            background-color: $color-primary;
+            opacity: 0;
+            transition: opacity .2s;
+        }
+    }
+
+    &__radio-input:checked ~ &__radio-label &__radio-btn::after,
+    &__radio-input:focus ~ &__radio-label &__radio-btn::after {
+        opacity: 1;
+    } 
+}
